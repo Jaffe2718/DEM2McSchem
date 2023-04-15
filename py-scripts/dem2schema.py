@@ -98,7 +98,7 @@ Usage:
     for row in range(mc_rows-1, -1, -1):                         # build from south to north
         for col in range(mc_cols):                               # build from west to east
             for elev in range(round(mc_data[col, row]), -1, -1):  # build from top to bottom by weight
-                if mc_data[col, row] == 0:                       # build the pavement
+                if round(mc_data[col, row]) == 0:                # build the pavement
                     continue
                 build_process = (round(mc_data[col, row]) - elev + 1) / round(mc_data[col, row])
                 for p in range(len(cumu_weight)):                # find the block by weight, p: index of block
