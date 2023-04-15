@@ -81,10 +81,10 @@ Usage:
     del src_data
     # scale the linear size of the schematic from the real world data
     rows, cols = fix_elev_data.shape
-    mc_rows = round(rows * float(scale) * dem_resolution)
-    mc_cols = round(cols * float(scale) * dem_resolution)
+    mc_rows = round(rows * float(scale) * dem_resolution)  # y
+    mc_cols = round(cols * float(scale) * dem_resolution)  # x
     # resize the DEM data and elevation data
-    mc_data = resize(fix_elev_data, (mc_rows, mc_cols), interpolation=dict_interpolation[interpolation]) * float(scale)
+    mc_data = resize(fix_elev_data, (mc_cols, mc_rows), interpolation=dict_interpolation[interpolation]) * float(scale)
     del fix_elev_data
     # parse stratum_struct json as dict
     struct = literal_eval(stratum_struct)
@@ -97,9 +97,9 @@ Usage:
     schema = MCSchematic()
     for row in range(mc_rows-1, -1, -1):                         # build from south to north
         for col in range(mc_cols):                               # build from west to east
-            for elev in range(round(mc_data[col, row]), -1, -1):  # build from top to bottom by weight
+            for elev in range(round(mc_data[row, col]), -1, -1):  # build from top to bottom by weight
                 try:
-                    build_process = (round(mc_data[col, row]) - elev + 1) / round(mc_data[col, row])
+                    build_process = (round(mc_data[row, col]) - elev + 1) / round(mc_data[row, col])
                 except ZeroDivisionError:
                     continue
                 for p in range(len(cumu_weight)):                # find the block by weight, p: index of block
