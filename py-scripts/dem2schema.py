@@ -98,9 +98,10 @@ Usage:
     for row in range(mc_rows-1, -1, -1):                         # build from south to north
         for col in range(mc_cols):                               # build from west to east
             for elev in range(round(mc_data[col, row]), -1, -1):  # build from top to bottom by weight
-                if round(mc_data[col, row]) == 0:                # build the pavement
+                try:
+                    build_process = (round(mc_data[col, row]) - elev + 1) / round(mc_data[col, row])
+                except ZeroDivisionError:
                     continue
-                build_process = (round(mc_data[col, row]) - elev + 1) / round(mc_data[col, row])
                 for p in range(len(cumu_weight)):                # find the block by weight, p: index of block
                     if build_process <= cumu_weight[p]:
                         # in minecraft, x is the east-west direction, y is the up-down direction, z is the north-south direction
