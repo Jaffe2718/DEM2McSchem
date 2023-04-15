@@ -1,0 +1,6 @@
+python >= 3.9                   // conda virtual environment is recommended
+gdal >= 3.4.3                   // to install gdal, see https://gdal.org/download.html
+mcschematic >= 11.4             // to install mcschematic, see https://pypi.org/project/mcschematic/
+opencv-python >= 4.7.0.72
+numpy >= 1.24.2
+pyinstaller >= 5.6.2
