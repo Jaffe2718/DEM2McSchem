@@ -58,7 +58,10 @@ Usage:
         :param pavement_elevation: elevation of pavement, default is 0.0
         :param version: version of the schematic, default is JE_1_19_2
         :param stratum_struct: python list of stratum structure, default is [("minecraft:grass_block",1)],
-                    all the elements are tuple, the first element is the block name, the second element is the thickness weight
+                    all the elements are tuple, the first element is the block name, the second element is the thickness weight.
+                    For example, [("minecraft:grass_block",1),("minecraft:dirt",3),("minecraft:stone",5)], which means
+                    the first layer is grass block, the second layer is dirt, the third layer is stone, and the thickness
+                    of these blocks are block:dirt:stone = 1:3:5
     '''
     # read DEM data as a single band raster
     dem = Open(dem_path)
@@ -94,8 +97,10 @@ Usage:
     schema = MCSchematic()
     for row in range(mc_rows-1, -1, -1):                         # build from south to north
         for col in range(mc_cols):                               # build from west to east
-            for elev in range(round(mc_data[row, col]), -1, -1):  # build from top to bottom by weight
-                build_process = (round(mc_data[row, col]) - elev + 1) / round(mc_data[row, col])
+            for elev in range(round(mc_data[col, row]), -1, -1):  # build from top to bottom by weight
+                if mc_data[col, row] == 0:                       # build the pavement
+                    continue
+                build_process = (round(mc_data[col, row]) - elev + 1) / round(mc_data[col, row])
                 for p in range(len(cumu_weight)):                # find the block by weight, p: index of block
                     if build_process <= cumu_weight[p]:
                         # in minecraft, x is the east-west direction, y is the up-down direction, z is the north-south direction
