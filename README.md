@@ -109,7 +109,7 @@ and drag it to the toolbar.
 ![use](doc/use.png)
 The user can use the plugin in ArcMap and ArcScene.
 Warning: The raster data must have a spatial reference system,
-and DEM data in Esri File Geo-database is not supported.
+and DEM data in Esri File Geo-database is not supported. And the DEM data must be a single band raster, nodata value mast less than -1e5
 
 2. you can load the Minecraft schematic file into Minecraft by using the [WorldEdit](https://www.curseforge.com/minecraft/mc-mods/worldedit) mod.
 ![load](doc/mc.png)
