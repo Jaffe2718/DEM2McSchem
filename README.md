@@ -112,6 +112,7 @@ Warning: The raster data must have a spatial reference system,
 and DEM data in Esri File Geo-database is not supported.
 
 2. you can load the Minecraft schematic file into Minecraft by using the [WorldEdit](https://www.curseforge.com/minecraft/mc-mods/worldedit) mod.
+![load](doc/mc.png)
 
 ## Developer Documentation
 
