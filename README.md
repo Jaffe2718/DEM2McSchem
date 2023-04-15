@@ -87,7 +87,7 @@ You should replace the DEM file path and the output schematic file path with you
 ### ArcGIS Plugin
 
 #### Installation
-1. You can download the plugin from the [release page](https://github.com/Jaffe2718/DEM2McSchem/).
+1. You can download the plugin from the [release page](https://github.com/Jaffe2718/DEM2McSchem/releases).
 2. Unzip all the files in the zip file, and put them in a folder.
 3. Launch ArcMap or ArcScene.
 4. Right click on the toolbar, and then click `Customize` in the context menu.
