@@ -102,7 +102,7 @@ Usage:
     schema = MCSchematic()
     for row in range(mc_rows-1, -1, -1):                         # build from south to north
         for col in range(mc_cols):                               # build from west to east
-            for elev in range(round(mc_data[row, col]), 0, -1):  # build from top to bottom by weight
+            for elev in range(round(mc_data[row, col]), -1, -1):  # build from top to bottom by weight
                 try:
                     build_process = (round(mc_data[row, col]) - elev + 1) / round(mc_data[row, col])
                 except ZeroDivisionError:
