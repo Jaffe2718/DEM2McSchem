@@ -49,16 +49,20 @@ namespace DEM2SchematicConverter
             IEnumLayer layers = GetDemLayers();
             layers.Reset();
             ILayer layer;
+            // add layer name to combo box
             while ((layer = layers.Next()) != null)
-            {
-                comboBoxDEMLayer.Items.Add(layer.Name);
+            {   // only add file system raster
+                if (layer is IRasterLayer && File.Exists(((IRasterLayer)layer).FilePath))
+                {
+                    comboBoxDEMLayer.Items.Add(layer.Name);
+                }
             }
             // set default value of combo box
             if (comboBoxDEMLayer.Items.Count > 0)
             {
                 comboBoxDEMLayer.SelectedIndex = 0;
             }
-            String tempDir = System.IO.Path.GetTempPath();
+            String tempDir = Path.GetTempPath();
             textBoxExportPath.Text = System.IO.Path.Combine(tempDir, "DEM2Schema.schem");
             
             // set default value of combo box
@@ -68,6 +72,8 @@ namespace DEM2SchematicConverter
             // set default layout of list view
             listViewStratumStruct.Columns[0].Width = listViewStratumStruct.Width / 2;
             listViewStratumStruct.Columns[1].Width = listViewStratumStruct.Width / 2;
+            // MessageBox.Show(Size.Width.ToString() + " " + Size.Height.ToString());
+            // MessageBox.Show(ClientSize.ToString());
         }
         
         private IEnumLayer GetDemLayers()
@@ -79,15 +85,13 @@ namespace DEM2SchematicConverter
             if (m_hookHelper != null)
             {
                 layers = m_hookHelper.FocusMap.Layers[uid];
-                return layers;
             }
-            if (m_sceneHookHelper != null)
+            else
             {
-                layers = m_sceneHookHelper.Scene.get_Layers(uid, true);
-                return layers;
+                layers = m_sceneHookHelper.Scene.Layers[uid, true];
             }
-            MessageBox.Show("No hook helper found!");
-            throw new Exception("No hook helper found!");
+            
+            return layers;
         }
 
         /// <summary>
@@ -211,7 +215,6 @@ namespace DEM2SchematicConverter
                 MessageBox.Show("Please select a Minecraft version!");
                 return;
             }
-/////////////////////////////////////////////////////////////////////////// debug
             // get the source DEM data file of the selected DEM layer, comboBoxDEMLayer.SelectedItem is the name of the layer, it is a string
             // get the layer object of the selected DEM layer
             UID uid = new UIDClass();
@@ -236,7 +239,6 @@ namespace DEM2SchematicConverter
             }
             // get the source DEM data file of the selected DEM layer
             String demPath = ((IRasterLayer) layer).FilePath;
-/////////////////////////////////////////////////////////////////////////// debug
             // generate a python list format string param named stratum_struct by reading the listview
             // [ ("minecraft:grass_block", 1), ("minecraft:dirt", 1), ("minecraft:stone", 1), ("minecraft:bedrock", 1) ]
             String stratumStruct = "[";
@@ -245,18 +247,26 @@ namespace DEM2SchematicConverter
                 stratumStruct += "('" + item.SubItems[0].Text + "', " + item.SubItems[1].Text + "), ";
             }
             stratumStruct = stratumStruct.Substring(0, stratumStruct.Length - 2) + "]";
+            // build the noise param "[{'block': 'minecraft:oak_sapling', 'density': 0.005 }, ...]"
+            String noise = "[";
+            foreach (ListViewItem item in listViewNoise.Items)
+            {
+                noise += item.Text + ", ";
+            }
+            noise = noise.Substring(0, noise.Length - 2) + "]";
             // call the python script exe to convert DEM to Schematic, which is at the same directory of this dll
             // get the path of the python script exe, which is at the same directory of this dll
             String exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\dem2schema.exe";
             // execute the python script exe
-            // dem2schema.exe <dem_path:str> <schema_path:str> [<interpolation=INTER_NEAREST>] [<scale=1.0>] [<pavement_elevation=0.0>] [<version=JE_1_19_2>] [<stratum_struct=[("minecraft:grass_block",1)]>]
+            // dem2schema.exe <dem_path:str> <schema_path:str> [<interpolation=INTER_NEAREST>] [<scale=1.0>] [<pavement_elevation=0.0>] [<version=JE_1_19_2>] [<stratum_struct=[("minecraft:grass_block",1)]>] [<noise=[]>]
             process.StartInfo.FileName = exePath;
             process.StartInfo.Arguments = "\"" + demPath + "\" \"" + textBoxExportPath.Text + "\" " +
                                           comboBoxInterpolation.SelectedItem.ToString() + " " +
                                           textBoxScale.Text + " " +
                                           textBoxPavementEle.Text + " " +
                                           comboBoxMcVersion.SelectedItem.ToString() + " " +
-                                          "\"" + stratumStruct + "\"";
+                                          "\"" + stratumStruct + "\"" + " " +
+                                          "\"" + noise + "\"";
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
@@ -264,13 +274,42 @@ namespace DEM2SchematicConverter
             process.Start();
             process.WaitForExit();
             // show a message box to tell the user the process is done
-            MessageBox.Show("Done!");
+            MessageBox.Show("Export Schematic at \"" + textBoxExportPath.Text + "\" Successfully!");
         }
 
         /// open https://github.com/Jaffe2718/DEM2McSchem/ in the default browser
         private void buttonHelp_Click(object sender, EventArgs e)
         {
             Process.Start("https://github.com/Jaffe2718/DEM2McSchem/");
+        }
+
+        private void buttonAddNoise_Click(object sender, EventArgs e)
+        {
+            // add a new item to the listview noise, and start edit it
+            listViewNoise.Items.Add(new ListViewItem("{'block': 'minecraft:oak_sapling', 'density': 0.005}"));
+            listViewNoise.Items[listViewNoise.Items.Count - 1].BeginEdit();
+        }
+
+        private void buttonDropNoise_Click(object sender, EventArgs e)
+        {
+            // remove the selected item from the listview noise, if nothing is selected, remove the last item
+            if (listViewNoise.SelectedItems.Count > 0)
+            {
+                listViewNoise.Items.Remove(listViewNoise.SelectedItems[0]);       // remove the selected item
+            }
+            else if (listViewNoise.Items.Count > 0)
+            {
+                listViewNoise.Items.RemoveAt(listViewNoise.Items.Count - 1);  // remove the last item
+            }
+        }
+
+        private void listViewNoise_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            // start edit the selected item
+            if (listViewNoise.SelectedItems.Count > 0)
+            {
+                listViewNoise.SelectedItems[0].BeginEdit();
+            }
         }
     }
 }

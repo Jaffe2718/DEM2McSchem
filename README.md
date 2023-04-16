@@ -114,6 +114,63 @@ and DEM data in Esri File Geo-database is not supported. And the DEM data must b
 2. you can load the Minecraft schematic file into Minecraft by using the [WorldEdit](https://www.curseforge.com/minecraft/mc-mods/worldedit) mod.
 ![load](doc/mc.png)
 
+
+### For 1.1.0
+
+#### What's New
+1. Now command line tool can automatically handle nodata value.
+You can use the following command to convert a DEM file to a Minecraft schematic file:
+```bash
+dem2schema.exe <dem_path:str> <schema_path:str> [<interpolation=INTER_NEAREST>] [<scale=1.0>] [<pavement_elevation=0.0>] [<version=JE_1_19_2>] [<stratum_struct=[("minecraft:grass_block",1)]>] [<noise=[]>]
+```
+```plaintext
+A tool to convert DEM data to Minecraft Schematic File (*.schem)
+
+Usage:
+    Help:
+        dem2schema.exe | dem2schema.exe -h | dem2schema.exe --help
+
+    Show Supported Minecraft Versions:
+        dem2schema.exe -v | dem2schema.exe --mc-versions
+
+    Convert DEM data to minecraft schematic (*.schem):
+        dem2schema.exe <dem_path:str> <schema_path:str> [<interpolation=INTER_NEAREST>] [<scale=1.0>] [<pavement_elevation=0.0>] [<version=JE_1_19_2>] [<stratum_struct=[("minecraft:grass_block",1)]>] [<noise=[]>]
+
+        :param dem_path: DEM file path
+        :param schema_path: output schematic file path (include file name)
+        :param interpolation: interpolation method, default is INTER_LINEAR, can be:
+                    INTER_NEAREST - a nearest-neighbor interpolation
+                    INTER_LINEAR - a bi-linear interpolation (used by default)
+                    INTER_AREA - resampling using pixel area relation. It may be a preferred method for image decimation,
+                        as it gives moiré'-free results. But when the image is zoomed, it is similar to the INTER_NEAREST method.
+                    INTER_CUBIC - a bicubic interpolation over 4x4 pixel neighborhood
+                    INTER_LANCZOS4 - a Lanczos interpolation over 8x8 pixel neighborhood
+                    INTER_LINEAR_EXACT - a bi-linear interpolation for exact downscaling
+                    INTER_MAX - flag, gives maximum interpolation algorithm
+                    WARP_FILL_OUTLIERS - flag, inverse mapping filling all the destination image pixels
+                    WARP_INVERSE_MAP - flag, sets the mapping to be from destination image to source image
+        :param scale: scale the linear size of the schematic from the real world data, default is 1.0
+                    In minecraft, 1 block = 1 meter, the real world distance is depended on the spatial reference system
+        :param pavement_elevation: elevation of pavement, default is 0.0, only to build the positive elevation finally in minecraft
+        :param version: version of the schematic, default is JE_1_19_2
+        :param stratum_struct: python list of stratum structure, default is [("minecraft:grass_block",1)],
+                    all the elements are tuple, the first element is the block name, the second element is the thickness weight.
+                    For example, [("minecraft:grass_block",1),("minecraft:dirt",3),("minecraft:stone",5)], which means
+                    the first layer is grass block, the second layer is dirt, the third layer is stone, and the thickness
+                    of these blocks are block:dirt:stone = 1:3:5
+        :param noise: python list of noice structure in string format, default is [], all the elements are dict,
+                    used to randomly generate blocks in game. The item front will cover the back.
+                    format: [ {'block': 'minecraft:<block_id>', 'density': <float: between 0 and 1>}, ... ]
+                    example: "[{'block': 'minecraft:oak_sapling', 'density': 0.005}, {'block': 'minecraft:dark_oak_sapling', 'density': 0.002}, {'block': 'minecraft:dandelion', 'density': 0.002}]"
+```
+2. In the ArcGIS plugin, the users can use random noise to generate blocks on the Minecraft surface.
+The format for noise configuration is python dick like this:
+```plaintext
+{'block': 'minecraft:<block_id>', 'density': <float: between 0 and 1>}
+```
+The higher the priority of the configuration item, the higher the priority,
+That is to say, if two random noise generated blocks overlap at a certain location on the Minecraft surface, the higher priority block will cover the lower priority block
+![noise](doc/noise.png)
 ## Developer Documentation
 
 ### Command Line Tool

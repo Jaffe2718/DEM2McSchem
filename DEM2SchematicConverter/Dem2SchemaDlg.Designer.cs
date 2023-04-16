@@ -52,6 +52,11 @@
             this.buttonDropStruct = new System.Windows.Forms.Button();
             this.buttonWeightIncr = new System.Windows.Forms.Button();
             this.buttonWeightDecr = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.listViewNoise = new System.Windows.Forms.ListView();
+            this.columnHeaderNoise = new System.Windows.Forms.ColumnHeader();
+            this.buttonAddNoise = new System.Windows.Forms.Button();
+            this.buttonDropNoise = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // comboBoxDEMLayer
@@ -174,9 +179,9 @@
             this.listViewStratumStruct.GridLines = true;
             this.listViewStratumStruct.LabelEdit = true;
             this.listViewStratumStruct.LabelWrap = false;
-            this.listViewStratumStruct.Location = new System.Drawing.Point(22, 402);
+            this.listViewStratumStruct.Location = new System.Drawing.Point(25, 372);
             this.listViewStratumStruct.Name = "listViewStratumStruct";
-            this.listViewStratumStruct.Size = new System.Drawing.Size(693, 358);
+            this.listViewStratumStruct.Size = new System.Drawing.Size(693, 183);
             this.listViewStratumStruct.TabIndex = 15;
             this.listViewStratumStruct.UseCompatibleStateImageBehavior = false;
             this.listViewStratumStruct.View = System.Windows.Forms.View.Details;
@@ -194,7 +199,7 @@
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(22, 352);
+            this.label7.Location = new System.Drawing.Point(25, 328);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(328, 38);
             this.label7.TabIndex = 16;
@@ -205,7 +210,7 @@
             // 
             this.buttonExecute.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold);
             this.buttonExecute.ForeColor = System.Drawing.Color.Navy;
-            this.buttonExecute.Location = new System.Drawing.Point(627, 799);
+            this.buttonExecute.Location = new System.Drawing.Point(629, 862);
             this.buttonExecute.Name = "buttonExecute";
             this.buttonExecute.Size = new System.Drawing.Size(130, 27);
             this.buttonExecute.TabIndex = 17;
@@ -217,7 +222,7 @@
             // 
             this.buttonHelp.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.buttonHelp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.buttonHelp.Location = new System.Drawing.Point(22, 799);
+            this.buttonHelp.Location = new System.Drawing.Point(22, 862);
             this.buttonHelp.Name = "buttonHelp";
             this.buttonHelp.Size = new System.Drawing.Size(130, 27);
             this.buttonHelp.TabIndex = 18;
@@ -228,7 +233,7 @@
             // buttonAddStruct
             // 
             this.buttonAddStruct.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonAddStruct.Location = new System.Drawing.Point(562, 352);
+            this.buttonAddStruct.Location = new System.Drawing.Point(562, 328);
             this.buttonAddStruct.Name = "buttonAddStruct";
             this.buttonAddStruct.Size = new System.Drawing.Size(38, 38);
             this.buttonAddStruct.TabIndex = 19;
@@ -239,7 +244,7 @@
             // buttonDropStruct
             // 
             this.buttonDropStruct.Font = new System.Drawing.Font("Times New Roman", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonDropStruct.Location = new System.Drawing.Point(644, 352);
+            this.buttonDropStruct.Location = new System.Drawing.Point(644, 328);
             this.buttonDropStruct.Name = "buttonDropStruct";
             this.buttonDropStruct.Size = new System.Drawing.Size(38, 38);
             this.buttonDropStruct.TabIndex = 20;
@@ -250,7 +255,7 @@
             // buttonWeightIncr
             // 
             this.buttonWeightIncr.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonWeightIncr.Location = new System.Drawing.Point(721, 487);
+            this.buttonWeightIncr.Location = new System.Drawing.Point(721, 372);
             this.buttonWeightIncr.Name = "buttonWeightIncr";
             this.buttonWeightIncr.Size = new System.Drawing.Size(38, 38);
             this.buttonWeightIncr.TabIndex = 21;
@@ -261,7 +266,7 @@
             // buttonWeightDecr
             // 
             this.buttonWeightDecr.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonWeightDecr.Location = new System.Drawing.Point(721, 612);
+            this.buttonWeightDecr.Location = new System.Drawing.Point(721, 517);
             this.buttonWeightDecr.Name = "buttonWeightDecr";
             this.buttonWeightDecr.Size = new System.Drawing.Size(38, 38);
             this.buttonWeightDecr.TabIndex = 22;
@@ -269,12 +274,67 @@
             this.buttonWeightDecr.UseVisualStyleBackColor = true;
             this.buttonWeightDecr.Click += new System.EventHandler(this.buttonWeightDecr_Click);
             // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(25, 579);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(428, 38);
+            this.label8.TabIndex = 23;
+            this.label8.Text = "Minecraft Surface Random Noise Block Design";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // listViewNoise
+            // 
+            this.listViewNoise.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { this.columnHeaderNoise });
+            this.listViewNoise.GridLines = true;
+            this.listViewNoise.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.listViewNoise.LabelEdit = true;
+            this.listViewNoise.LabelWrap = false;
+            this.listViewNoise.Location = new System.Drawing.Point(25, 623);
+            this.listViewNoise.Name = "listViewNoise";
+            this.listViewNoise.Size = new System.Drawing.Size(693, 213);
+            this.listViewNoise.TabIndex = 24;
+            this.listViewNoise.UseCompatibleStateImageBehavior = false;
+            this.listViewNoise.View = System.Windows.Forms.View.Details;
+            this.listViewNoise.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listViewNoise_MouseDoubleClick);
+            // 
+            // columnHeaderNoise
+            // 
+            this.columnHeaderNoise.Text = "Noise Block & Density ({\'block\': \'minecraft:<id>\', \'density\': <float>})";
+            this.columnHeaderNoise.Width = 689;
+            // 
+            // buttonAddNoise
+            // 
+            this.buttonAddNoise.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.buttonAddNoise.Location = new System.Drawing.Point(562, 579);
+            this.buttonAddNoise.Name = "buttonAddNoise";
+            this.buttonAddNoise.Size = new System.Drawing.Size(38, 38);
+            this.buttonAddNoise.TabIndex = 25;
+            this.buttonAddNoise.Text = "+";
+            this.buttonAddNoise.UseVisualStyleBackColor = true;
+            this.buttonAddNoise.Click += new System.EventHandler(this.buttonAddNoise_Click);
+            // 
+            // buttonDropNoise
+            // 
+            this.buttonDropNoise.Font = new System.Drawing.Font("Times New Roman", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonDropNoise.Location = new System.Drawing.Point(644, 579);
+            this.buttonDropNoise.Name = "buttonDropNoise";
+            this.buttonDropNoise.Size = new System.Drawing.Size(38, 38);
+            this.buttonDropNoise.TabIndex = 26;
+            this.buttonDropNoise.Text = "-";
+            this.buttonDropNoise.UseVisualStyleBackColor = true;
+            this.buttonDropNoise.Click += new System.EventHandler(this.buttonDropNoise_Click);
+            // 
             // Dem2SchemaDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(785, 870);
+            this.ClientSize = new System.Drawing.Size(788, 947);
+            this.Controls.Add(this.buttonDropNoise);
+            this.Controls.Add(this.buttonAddNoise);
+            this.Controls.Add(this.listViewNoise);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.buttonWeightDecr);
             this.Controls.Add(this.buttonWeightIncr);
             this.Controls.Add(this.buttonDropStruct);
@@ -304,6 +364,15 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.ColumnHeader columnHeaderNoise;
+
+        private System.Windows.Forms.Button buttonAddNoise;
+        private System.Windows.Forms.Button buttonDropNoise;
+
+        private System.Windows.Forms.ListView listViewNoise;
+
+        private System.Windows.Forms.Label label8;
 
         private System.Windows.Forms.ColumnHeader columnHeaderBlock;
         private System.Windows.Forms.ColumnHeader columnHeaderWeight;
