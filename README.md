@@ -171,6 +171,7 @@ The format for noise configuration is python dick like this:
 The higher the priority of the configuration item, the higher the priority,
 That is to say, if two random noise generated blocks overlap at a certain location on the Minecraft surface, the higher priority block will cover the lower priority block
 ![noise](doc/noise.png)
+![noice-view](doc/noise_view.png)
 ## Developer Documentation
 
 ### Command Line Tool
