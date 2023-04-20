@@ -87,7 +87,7 @@ You should replace the DEM file path and the output schematic file path with you
 ### ArcGIS Plugin
 
 #### Installation
-1. You can download the plugin from the [release page](https://github.com/Jaffe2718/DEM2McSchem/releases).
+1. You can download the plugin from the [release page](https://github.com/Jaffe2718/DEM2McSchem/releases) and ArcGIS 10.8 at first.
 2. Unzip all the files in the zip file, and put them in a folder.
 3. Launch ArcMap or ArcScene.
 4. Right click on the toolbar, and then click `Customize` in the context menu.
@@ -172,6 +172,63 @@ The higher the priority of the configuration item, the higher the priority,
 That is to say, if two random noise generated blocks overlap at a certain location on the Minecraft surface, the higher priority block will cover the lower priority block
 ![noise](doc/noise.png)
 ![noice-view](doc/noise_view.png)
+
+### For 1.2.x
+
+#### Command Line Tool
+##### Update Command Syntax
+Now, random noise distribution supports block and [NBT File](https://minecraft.fandom.com/wiki/Structure_Block_file_format) structures
+```plaintext
+Usage:
+    Help:
+        dem2schematic.exe | dem2schematic.exe -h | dem2schematic.exe --help
+
+    Show Supported Minecraft Versions:
+        dem2schematic.exe -v | dem2schematic.exe --mc-versions
+
+    Convert DEM data to minecraft schematic (*.schem):
+        dem2schematic.exe <dem_path:str> <export_path:str> [<interpolation=INTER_NEAREST>] [<scale=1.0>] [<pavement_elevation=0.0>] [<version=JE_1_19_2>] [<stratum_struct=[("minecraft:grass_block",1)]>] [<noise=[]>]
+
+        :param dem_path: DEM file path
+        :param export_path: output schematic file path (include file name)
+        :param interpolation: interpolation method, default is INTER_LINEAR, can be:
+                    INTER_NEAREST - a nearest-neighbor interpolation
+                    INTER_LINEAR - a bi-linear interpolation (used by default)
+                    INTER_AREA - resampling using pixel area relation. It may be a preferred method for image decimation,
+                        as it gives moiré'-free results. But when the image is zoomed, it is similar to the INTER_NEAREST method.
+                    INTER_CUBIC - a bicubic interpolation over 4x4 pixel neighborhood
+                    INTER_LANCZOS4 - a Lanczos interpolation over 8x8 pixel neighborhood
+                    INTER_LINEAR_EXACT - a bi-linear interpolation for exact downscaling
+                    INTER_MAX - flag, gives maximum interpolation algorithm
+                    WARP_FILL_OUTLIERS - flag, inverse mapping filling all the destination image pixels
+                    WARP_INVERSE_MAP - flag, sets the mapping to be from destination image to source image
+        :param scale: scale the linear size of the schematic from the real world data, default is 1.0
+                    In minecraft, 1 block = 1 meter, the real world distance is depended on the spatial reference system
+        :param pavement_elevation: elevation of pavement, default is 0.0, only to build the positive elevation finally in minecraft
+        :param version: version of the schematic, default is JE_1_19_2
+        :param stratum_struct: python list of stratum structure, default is [("minecraft:grass_block",1)],
+                    all the elements are tuple, the first element is the block name, the second element is the thickness weight.
+                    For example, [("minecraft:grass_block",1),("minecraft:dirt",3),("minecraft:stone",5)], which means
+                    the first layer is grass block, the second layer is dirt, the third layer is stone, and the thickness
+                    of these blocks are block:dirt:stone = 1:3:5
+        :param noise: python list of noice structure in string format, default is [], all the elements are dict,
+                    there are two types of noise structure, one is single block, the other is *.nbt file means mc-structure.
+                    {'type': 'block', 'block': 'minecraft:<block_id>', 'density': <float: between 0 and 1>}
+                    {'type': 'nbt', 'path': '<nbt_file_path>', 'density': <float: between 0 and 1>, 'offset': (dx, dy, dz), 'overwrite': <bool>, 'ignore_air': <bool>}
+                    then add these two types of noise structure to the python list, like this:
+                    [{...}, {...} ...]
+                    The nbt type noice has higher priority.
+                    The density of the noise item is the probability of the noise item appearing.
+```
+#### ArcGIS Plugin
+##### What's New
+1. DEM Raster Dataset in Geo-Database is supported.
+2. Noise Feature syntax change:
+```plaintext
+{'type': 'block', 'block': 'minecraft:<block_id>', 'density': <float: between 0 and 1>}
+{'type': 'nbt', 'path': '<nbt_file_path>', 'density': <float: between 0 and 1>, 'offset': (dx, dy, dz), 'overwrite': <bool>, 'ignore_air': <bool>}
+```
+So Minecraft structures of NBT File are supported.
 ## Developer Documentation
 
 ### Command Line Tool
@@ -193,7 +250,7 @@ conda install mcschematic
 2. Use Pyinstaller to create the executable file `dem2schema.exe`.
 ```bash
 # create the executable file as a command line tool
-pyinstaller -F -i "path/to/your/icon.ico" dem2schema.py
+pyinstaller -F -i "path/to/your/icon.ico" dem2schematic.py
 ```
 ### ArcGIS Plugin
 1. You need to install `ArcGIS 10.8`, `Visual Studio 2017`, `.NET Framework 4.7.2`, and `ArcGIS SDK for .NET 10.8`.
@@ -207,7 +264,7 @@ git clone https://github.com/Jaffe2718/DEM2McSchem.git
 > 2. Build the solution in `Release` mode.
 > 3. Create Python script core tool for this plugin:
 > ```bash
-> pyinstaller -F -w -i "path/to/your/icon.ico" dem2schema.py
+> pyinstaller -F -w -i "path/to/your/icon.ico" dem2schematic.py
 > ```
 > Then copy the `dem2schema.exe` file built by Pyinstaller to the `bin/Release` folder of the plugin.
 > 4. Zip the entire folder `bin/Release` of the plugin, you can rename the zip file to any name you want.

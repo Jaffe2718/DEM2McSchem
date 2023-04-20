@@ -16,6 +16,8 @@ using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.DataSourcesRaster;
 using ESRI.ArcGIS.esriSystem;
 using ESRI.ArcGIS.Geodatabase;
+using ESRI.ArcGIS.Geoprocessing;
+using ESRI.ArcGIS.Geoprocessor;
 using Message = System.Windows.Forms.Message;
 
 namespace DEM2SchematicConverter
@@ -30,6 +32,8 @@ namespace DEM2SchematicConverter
 
         private const uint WM_VSCROLL = 0x115;
         private const uint SB_BOTTOM = 7;
+
+        private bool mc_block = true;
 
         public Dem2SchemaDlg(IHookHelper hookHelper)
         {
@@ -51,8 +55,8 @@ namespace DEM2SchematicConverter
             ILayer layer;
             // add layer name to combo box
             while ((layer = layers.Next()) != null)
-            {   // only add file system raster
-                if (layer is IRasterLayer && File.Exists(((IRasterLayer)layer).FilePath))
+            {   // only add raster
+                if (layer is IRasterLayer)
                 {
                     comboBoxDEMLayer.Items.Add(layer.Name);
                 }
@@ -92,6 +96,28 @@ namespace DEM2SchematicConverter
             }
             
             return layers;
+        }
+
+        private string GetStratumStruct()   // get the struct of stratum: python list of bi-tuple [ ("block", weight), ("block", weight), ... ]
+        {
+            string stratumStruct = "\"[";
+            foreach (ListViewItem item in listViewStratumStruct.Items)
+            {
+                stratumStruct += "('" + item.Text + "'," + item.SubItems[1].Text + "), ";
+            }
+            stratumStruct = stratumStruct.Substring(0, stratumStruct.Length - 2) + "]\"";
+            return stratumStruct;
+        }
+        
+        private string GetNoise()   // get the noise of stratum: python list of dict [ {...}, {...}, ... ], item.Text is dict
+        {
+            string noise = "\"[";
+            foreach (ListViewItem item in listViewNoise.Items)
+            {
+                noise += item.Text + ", ";
+            }
+            noise = noise.Substring(0, noise.Length - 2) + "]\"";
+            return noise;
         }
 
         /// <summary>
@@ -182,14 +208,14 @@ namespace DEM2SchematicConverter
         /// <summary>
         /// To Convert DEM to Schematic
         /// First, check the input parameters
-        /// Second, get the source DEM file path of the selected DEM layer
-        /// Third, generate the a python list format string param named stratum_struct by reading the listview
-        /// Fourth, call the python script exe to convert DEM to Schematic, which is at the same directory of this dll
-        /// Fifth, show a message box to tell the user the process is done
+        /// Second, create a new folder named "__rCache__" in the dst folder, means "Raster Cache"
+        /// Third, copy the DEM raster to the "__rCache__" folder, use "工具箱\系统工具箱\Data Management Tools.tbx\栅格\栅格数据集\复制栅格" tool, named as the same as the schema file, extension is ".bil"
+        /// Fourth, call python script to convert copied DEM to Schematic
+        /// Fifth, delete the "rasterCache" folder
+        /// Finally, show a message box to tell the user the process is done
         private void buttonExecute_Click(object sender, EventArgs e)
         {
-            Process process = new Process();
-            // check the input parameters
+            // 1. check the input parameters
             if (comboBoxDEMLayer.SelectedIndex == -1)
             {
                 MessageBox.Show("Please select a DEM layer!");
@@ -215,78 +241,82 @@ namespace DEM2SchematicConverter
                 MessageBox.Show("Please select a Minecraft version!");
                 return;
             }
-            // get the source DEM data file of the selected DEM layer, comboBoxDEMLayer.SelectedItem is the name of the layer, it is a string
-            // get the layer object of the selected DEM layer
-            UID uid = new UIDClass();
-            uid.Value = "{D02371C7-35F7-11D2-B1F2-00C04F8EDEFF}";  // the uid of the layer
-            IEnumLayer enumLayer;
-            if (m_hookHelper != null)
-            { 
-                enumLayer = m_hookHelper.FocusMap.Layers[uid, true];
-            }
-            else
+            // 2. create a new folder named "__rCache__" in the dst folder
+            string dstFolder = Path.GetDirectoryName(textBoxExportPath.Text);   // get the folder of the dst schematic file
+            if (dstFolder != null)
             {
-                enumLayer = m_sceneHookHelper.Scene.Layers[uid, true];
-            }
-            ILayer layer = enumLayer.Next();
-            while (layer != null)
-            {
-                if (layer.Name == comboBoxDEMLayer.SelectedItem.ToString())
+                string rasterCacheFolder = Path.Combine(dstFolder, "__rCache__");      // create a new folder named "__rCache__" in the dst folder
+                if (Directory.Exists(rasterCacheFolder))
                 {
-                    break;
+                    Directory.Delete(rasterCacheFolder, true);
                 }
-                layer = enumLayer.Next();
+                Directory.CreateDirectory(rasterCacheFolder);                       // create the folder
+                // 3. copy the DEM raster to the "__rCache__" folder
+                ILayer srcLayer;                                                   // the layer of the DEM raster
+                IEnumLayer enumLayer = GetDemLayers();                             // get all the DEM layers
+                enumLayer.Reset();                                                 // reset the enumLayer
+                while ((srcLayer = enumLayer.Next()) != null)
+                {   // only add raster
+                    if (srcLayer is IRasterLayer && srcLayer.Name == comboBoxDEMLayer.SelectedItem.ToString())
+                    {
+                        break;
+                    }
+                }
+                string dstRasterPath = Path.Combine(rasterCacheFolder, Path.GetFileNameWithoutExtension(textBoxExportPath.Text) + ".bil"); // located the new raster file named as the same as the schema file, extension is ".bil"
+                Geoprocessor gp = new Geoprocessor();                              // create a new Geoprocessor
+                gp.OverwriteOutput = true;                                         // set the overwrite option to true
+                gp.AddOutputsToMap = false;                                        // don't add the output to the map
+                ESRI.ArcGIS.DataManagementTools.CopyRaster copyRaster = new ESRI.ArcGIS.DataManagementTools.CopyRaster(); // create a new "CopyRaster" tool
+                copyRaster.in_raster = srcLayer;                                   // set the input raster
+                copyRaster.out_rasterdataset = dstRasterPath;                      // set the output DEM raster
+                gp.Execute(copyRaster, null);                            // execute the tool
+                // 4. call python script to convert copied DEM to Schematic
+                Process pyProcess = new Process();                                 // create a new process
+                // 1.2.x named dem2schematic.exe, before 1.2.0 named dem2schema.exe
+                // dem2schematic.exe <dem_path:str> <schema_path:str> [<interpolation=INTER_NEAREST>] [<scale=1.0>] [<pavement_elevation=0.0>] [<version=JE_1_19_2>] [<stratum_struct=[("minecraft:grass_block",1)]>] [<noise=[]>]
+                String exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\dem2schematic.exe";         // get the path of the executable file, at the same folder of the dll
+                pyProcess.StartInfo.FileName = exePath;                            // set the executable file
+                pyProcess.StartInfo.Arguments = "\"" + dstRasterPath + "\" " +
+                                                "\"" + textBoxExportPath.Text + "\" " +
+                                                comboBoxInterpolation.SelectedItem + " " +
+                                                textBoxScale.Text + " " +
+                                                textBoxPavementEle.Text + " " +
+                                                comboBoxMcVersion.SelectedItem + " " +
+                                                GetStratumStruct() + " " +
+                                                GetNoise();                                     // set the arguments
+                pyProcess.StartInfo.UseShellExecute = false;                      // don't use the shell execute
+                pyProcess.StartInfo.RedirectStandardOutput = true;                // redirect the standard output
+                pyProcess.StartInfo.RedirectStandardError = true;                 // redirect the standard error
+                pyProcess.StartInfo.CreateNoWindow = true;                        // don't create a new window
+                pyProcess.Start();                                                // start the process
+                pyProcess.WaitForExit();                                          // wait for the process to exit
+                // 5. delete the "rasterCache" folder and all the files in it
+                Directory.Delete(rasterCacheFolder, true);                        // delete the "rasterCache" folder and all the files in it
             }
-            // get the source DEM data file of the selected DEM layer
-            String demPath = ((IRasterLayer) layer).FilePath;
-            // generate a python list format string param named stratum_struct by reading the listview
-            // [ ("minecraft:grass_block", 1), ("minecraft:dirt", 1), ("minecraft:stone", 1), ("minecraft:bedrock", 1) ]
-            String stratumStruct = "[";
-            foreach (ListViewItem item in listViewStratumStruct.Items)
-            {
-                stratumStruct += "('" + item.SubItems[0].Text + "', " + item.SubItems[1].Text + "), ";
-            }
-            stratumStruct = stratumStruct.Substring(0, stratumStruct.Length - 2) + "]";
-            // build the noise param "[{'block': 'minecraft:oak_sapling', 'density': 0.005 }, ...]"
-            String noise = "[";
-            foreach (ListViewItem item in listViewNoise.Items)
-            {
-                noise += item.Text + ", ";
-            }
-            noise = noise.Substring(0, noise.Length - 2) + "]";
-            // call the python script exe to convert DEM to Schematic, which is at the same directory of this dll
-            // get the path of the python script exe, which is at the same directory of this dll
-            String exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\dem2schema.exe";
-            // execute the python script exe
-            // dem2schema.exe <dem_path:str> <schema_path:str> [<interpolation=INTER_NEAREST>] [<scale=1.0>] [<pavement_elevation=0.0>] [<version=JE_1_19_2>] [<stratum_struct=[("minecraft:grass_block",1)]>] [<noise=[]>]
-            process.StartInfo.FileName = exePath;
-            process.StartInfo.Arguments = "\"" + demPath + "\" \"" + textBoxExportPath.Text + "\" " +
-                                          comboBoxInterpolation.SelectedItem.ToString() + " " +
-                                          textBoxScale.Text + " " +
-                                          textBoxPavementEle.Text + " " +
-                                          comboBoxMcVersion.SelectedItem.ToString() + " " +
-                                          "\"" + stratumStruct + "\"" + " " +
-                                          "\"" + noise + "\"";
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.CreateNoWindow = false;
-            process.Start();
-            process.WaitForExit();
-            // show a message box to tell the user the process is done
-            MessageBox.Show("Export Schematic at \"" + textBoxExportPath.Text + "\" Successfully!");
+
+            // 6. show a message box to tell the user the process is done
+            MessageBox.Show("Export \"" + textBoxExportPath.Text + "\" successfully!");
         }
 
         /// open https://github.com/Jaffe2718/DEM2McSchem/ in the default browser
         private void buttonHelp_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/Jaffe2718/DEM2McSchem/");
+            Process.Start("https://github.com/Jaffe2718/DEM2McSchem#for-120");
         }
 
         private void buttonAddNoise_Click(object sender, EventArgs e)
         {
             // add a new item to the listview noise, and start edit it
-            listViewNoise.Items.Add(new ListViewItem("{'block': 'minecraft:oak_sapling', 'density': 0.005}"));
+            if (mc_block)
+            {
+                listViewNoise.Items.Add(new ListViewItem("{'type': 'block', 'block': 'minecraft:<block_id>', 'density': <float: between 0 and 1>}"));
+                mc_block = false;
+            }
+            else
+            {
+                listViewNoise.Items.Add(new ListViewItem("{'type': 'nbt', 'path': '<nbt_file_path>', 'density': <float: between 0 and 1>, 'offset': (dx, dy, dz), 'overwrite': <bool>, 'ignore_air': <bool>}"));
+                mc_block = true;
+            }
             listViewNoise.Items[listViewNoise.Items.Count - 1].BeginEdit();
         }
 
