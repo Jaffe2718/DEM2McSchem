@@ -301,7 +301,7 @@ namespace DEM2SchematicConverter
         /// open https://github.com/Jaffe2718/DEM2McSchem/ in the default browser
         private void buttonHelp_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/Jaffe2718/DEM2McSchem#for-120");
+            Process.Start("https://github.com/Jaffe2718/DEM2McSchem#for-12x");
         }
 
         private void buttonAddNoise_Click(object sender, EventArgs e)
