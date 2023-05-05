@@ -69,6 +69,8 @@ namespace DEM2SchemExplorer
             // 
             // buttonConvert
             // 
+            this.buttonConvert.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.buttonConvert.ForeColor = System.Drawing.Color.Blue;
             this.buttonConvert.Location = new System.Drawing.Point(56, 749);
             this.buttonConvert.Name = "buttonConvert";
             this.buttonConvert.Size = new System.Drawing.Size(397, 66);

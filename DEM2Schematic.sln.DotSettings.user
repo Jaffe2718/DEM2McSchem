@@ -4,6 +4,8 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Program Files (x86)\ArcGIS\DeveloperKit10.8\DotNet\ESRI.ArcGIS.ADF.Local.dll" /&gt;&#xD;
   &lt;Assembly Path="E:\Coding\CSharp\ArcGISDevelopment\DEM2Schematic\DEM2SchemConverter\obj\x86\Release\Interop.esriSearch.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\windows\Microsoft.Net\assembly\GAC_MSIL\ESRI.ArcGIS.DataSourcesRaster\v4.0_10.8.0.0__8fc3cc631e44ad86\ESRI.ArcGIS.DataSourcesRaster.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\windows\Microsoft.Net\assembly\GAC_MSIL\ESRI.ArcGIS.Carto\v4.0_10.8.0.0__8fc3cc631e44ad86\ESRI.ArcGIS.Carto.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=DEM2SchemConverter_002FDem2SchemaDlg/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=DEM2SchemConverter_002FMainForm/@EntryIndexedValue">True</s:Boolean>

@@ -59,18 +59,11 @@
       <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_MSIL\ESRI.ArcGIS.3DAnalyst\v4.0_10.8.0.0__8fc3cc631e44ad86\ESRI.ArcGIS.3DAnalyst.dll</HintPath>
     </Reference>
     <Reference Include="ESRI.ArcGIS.AxControls, Version=10.8.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL" />
-    <Reference Include="ESRI.ArcGIS.Carto">
-      <HintPath>C:\Program Files (x86)\ArcGIS\DeveloperKit10.8\DotNet\ESRI.ArcGIS.Carto.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
     <Reference Include="ESRI.ArcGIS.Controls">
       <HintPath>C:\Program Files (x86)\ArcGIS\DeveloperKit10.8\DotNet\ESRI.ArcGIS.Controls.dll</HintPath>
     </Reference>
     <Reference Include="ESRI.ArcGIS.DataManagementTools">
       <HintPath>C:\Program Files (x86)\ArcGIS\DeveloperKit10.8\DotNet\Toolboxes\ESRI.ArcGIS.DataManagementTools.dll</HintPath>
-    </Reference>
-    <Reference Include="ESRI.ArcGIS.DataSourcesRaster">
-      <HintPath>C:\Program Files (x86)\ArcGIS\DeveloperKit10.8\DotNet\ESRI.ArcGIS.DataSourcesRaster.dll</HintPath>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Display, Version=10.8.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
       <EmbedInteropTypes>True</EmbedInteropTypes>
