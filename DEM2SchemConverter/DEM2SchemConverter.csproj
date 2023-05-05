@@ -214,15 +214,6 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-    <COMReference Include="esriArcScene">
-      <Guid>{05069B08-1EC8-4B7F-91AA-1D5225154A72}</Guid>
-      <VersionMajor>10</VersionMajor>
-      <VersionMinor>8</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
     <COMReference Include="esriCarto">
       <Guid>{45AC68FF-DEFF-4884-B3A9-7D882EDCAEF1}</Guid>
       <VersionMajor>10</VersionMajor>
