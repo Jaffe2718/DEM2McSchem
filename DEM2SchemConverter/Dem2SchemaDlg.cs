@@ -1,24 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Controls;
-using ESRI.ArcGIS.DataSourcesRaster;
-using ESRI.ArcGIS.esriSystem;
-using ESRI.ArcGIS.Geodatabase;
-using ESRI.ArcGIS.Geoprocessing;
 using ESRI.ArcGIS.Geoprocessor;
-using Message = System.Windows.Forms.Message;
 
 namespace DEM2SchematicConverter
 {
@@ -27,30 +15,22 @@ namespace DEM2SchematicConverter
         [DllImport("user32.dll")]
         private static extern int PostMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
 
-        private IHookHelper m_hookHelper;
-        private ISceneHookHelper m_sceneHookHelper;
-
+        private AxSceneControl m_sceneControl = null;
         private const uint WM_VSCROLL = 0x115;
         private const uint SB_BOTTOM = 7;
 
         private bool mc_block = true;
 
-        public Dem2SchemaDlg(IHookHelper hookHelper)
+        public Dem2SchemaDlg(AxSceneControl targetSC)
         {
             InitializeComponent();
-            m_hookHelper = hookHelper;
-        }
-        
-        public Dem2SchemaDlg(ISceneHookHelper hookHelper)
-        {
-            InitializeComponent();
-            m_sceneHookHelper = hookHelper;
+            m_sceneControl = targetSC;
         }
 
         private void Dem2SchemaDlg_Load(object sender, EventArgs e)
         {
             // get single band raster by GetDEMLayers()
-            IEnumLayer layers = GetDemLayers();
+            IEnumLayer layers = m_sceneControl.Scene.Layers;
             layers.Reset();
             ILayer layer;
             // add layer name to combo box
@@ -79,24 +59,6 @@ namespace DEM2SchematicConverter
             // MessageBox.Show(Size.Width.ToString() + " " + Size.Height.ToString());
             // MessageBox.Show(ClientSize.ToString());
         }
-        
-        private IEnumLayer GetDemLayers()
-        {
-            UID uid = new UIDClass();
-            // get single band raster
-            uid.Value = "{D02371C7-35F7-11D2-B1F2-00C04F8EDEFF}";
-            IEnumLayer layers;
-            if (m_hookHelper != null)
-            {
-                layers = m_hookHelper.FocusMap.Layers[uid];
-            }
-            else
-            {
-                layers = m_sceneHookHelper.Scene.Layers[uid, true];
-            }
-            
-            return layers;
-        }
 
         private string GetStratumStruct()   // get the struct of stratum: python list of bi-tuple [ ("block", weight), ("block", weight), ... ]
         {
@@ -116,7 +78,14 @@ namespace DEM2SchematicConverter
             {
                 noise += item.Text + ", ";
             }
-            noise = noise.Substring(0, noise.Length - 2) + "]\"";
+            if (noise.Substring(noise.Length - 2, 2).Equals(", "))
+            {
+                noise = noise.Substring(0, noise.Length - 2) + "]\"";
+            }
+            else
+            {
+                noise += "]\"";
+            }
             return noise;
         }
 
@@ -253,7 +222,7 @@ namespace DEM2SchematicConverter
                 Directory.CreateDirectory(rasterCacheFolder);                       // create the folder
                 // 3. copy the DEM raster to the "__rCache__" folder
                 ILayer srcLayer;                                                   // the layer of the DEM raster
-                IEnumLayer enumLayer = GetDemLayers();                             // get all the DEM layers
+                IEnumLayer enumLayer = m_sceneControl.Scene.Layers;                // get all the DEM layers
                 enumLayer.Reset();                                                 // reset the enumLayer
                 while ((srcLayer = enumLayer.Next()) != null)
                 {   // only add raster
@@ -274,7 +243,8 @@ namespace DEM2SchematicConverter
                 Process pyProcess = new Process();                                 // create a new process
                 // 1.2.x named dem2schematic.exe, before 1.2.0 named dem2schema.exe
                 // dem2schematic.exe <dem_path:str> <schema_path:str> [<interpolation=INTER_NEAREST>] [<scale=1.0>] [<pavement_elevation=0.0>] [<version=JE_1_19_2>] [<stratum_struct=[("minecraft:grass_block",1)]>] [<noise=[]>]
-                String exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\dem2schematic.exe";         // get the path of the executable file, at the same folder of the dll
+                // get dem2schematic.exe path in the same folder of the main executable file of ArcEngine application
+                String exePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "dem2schematic.exe");
                 pyProcess.StartInfo.FileName = exePath;                            // set the executable file
                 pyProcess.StartInfo.Arguments = "\"" + dstRasterPath + "\" " +
                                                 "\"" + textBoxExportPath.Text + "\" " +
@@ -283,7 +253,7 @@ namespace DEM2SchematicConverter
                                                 textBoxPavementEle.Text + " " +
                                                 comboBoxMcVersion.SelectedItem + " " +
                                                 GetStratumStruct() + " " +
-                                                GetNoise();                                     // set the arguments
+                                                GetNoise();                       // set the arguments
                 pyProcess.StartInfo.UseShellExecute = false;                      // don't use the shell execute
                 pyProcess.StartInfo.RedirectStandardOutput = true;                // redirect the standard output
                 pyProcess.StartInfo.RedirectStandardError = true;                 // redirect the standard error

@@ -1,8 +1,13 @@
-/DEM2SchematicConverter/bin/
-/DEM2SchematicConverter/obj/
 /.vs/
 /.idea/
 /MxdMaps/
 /products/
 /dist/
 /dem2schema.spec
+/DEM2SchemExplorer/bin/
+/DEM2SchemExplorer/obj/
+/packages/
+/DEM2SchemConverter/bin/
+/DEM2SchemConverter/obj/
+/dem2schematic.spec
+/build/
