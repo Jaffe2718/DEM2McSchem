@@ -177,11 +177,12 @@
             // 
             this.listViewStratumStruct.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { this.columnHeaderBlock, this.columnHeaderWeight });
             this.listViewStratumStruct.GridLines = true;
+            this.listViewStratumStruct.HideSelection = false;
             this.listViewStratumStruct.LabelEdit = true;
             this.listViewStratumStruct.LabelWrap = false;
             this.listViewStratumStruct.Location = new System.Drawing.Point(25, 372);
             this.listViewStratumStruct.Name = "listViewStratumStruct";
-            this.listViewStratumStruct.Size = new System.Drawing.Size(693, 183);
+            this.listViewStratumStruct.Size = new System.Drawing.Size(693, 163);
             this.listViewStratumStruct.TabIndex = 15;
             this.listViewStratumStruct.UseCompatibleStateImageBehavior = false;
             this.listViewStratumStruct.View = System.Windows.Forms.View.Details;
@@ -210,9 +211,9 @@
             // 
             this.buttonExecute.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold);
             this.buttonExecute.ForeColor = System.Drawing.Color.Navy;
-            this.buttonExecute.Location = new System.Drawing.Point(629, 862);
+            this.buttonExecute.Location = new System.Drawing.Point(629, 777);
             this.buttonExecute.Name = "buttonExecute";
-            this.buttonExecute.Size = new System.Drawing.Size(130, 27);
+            this.buttonExecute.Size = new System.Drawing.Size(130, 34);
             this.buttonExecute.TabIndex = 17;
             this.buttonExecute.Text = "Convert";
             this.buttonExecute.UseVisualStyleBackColor = true;
@@ -222,9 +223,9 @@
             // 
             this.buttonHelp.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.buttonHelp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.buttonHelp.Location = new System.Drawing.Point(22, 862);
+            this.buttonHelp.Location = new System.Drawing.Point(25, 777);
             this.buttonHelp.Name = "buttonHelp";
-            this.buttonHelp.Size = new System.Drawing.Size(130, 27);
+            this.buttonHelp.Size = new System.Drawing.Size(130, 34);
             this.buttonHelp.TabIndex = 18;
             this.buttonHelp.Text = "Help";
             this.buttonHelp.UseVisualStyleBackColor = true;
@@ -266,7 +267,7 @@
             // buttonWeightDecr
             // 
             this.buttonWeightDecr.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonWeightDecr.Location = new System.Drawing.Point(721, 517);
+            this.buttonWeightDecr.Location = new System.Drawing.Point(721, 497);
             this.buttonWeightDecr.Name = "buttonWeightDecr";
             this.buttonWeightDecr.Size = new System.Drawing.Size(38, 38);
             this.buttonWeightDecr.TabIndex = 22;
@@ -276,7 +277,7 @@
             // 
             // label8
             // 
-            this.label8.Location = new System.Drawing.Point(25, 579);
+            this.label8.Location = new System.Drawing.Point(25, 560);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(428, 38);
             this.label8.TabIndex = 23;
@@ -288,11 +289,12 @@
             this.listViewNoise.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { this.columnHeaderNoise });
             this.listViewNoise.GridLines = true;
             this.listViewNoise.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.listViewNoise.HideSelection = false;
             this.listViewNoise.LabelEdit = true;
             this.listViewNoise.LabelWrap = false;
-            this.listViewNoise.Location = new System.Drawing.Point(25, 623);
+            this.listViewNoise.Location = new System.Drawing.Point(25, 601);
             this.listViewNoise.Name = "listViewNoise";
-            this.listViewNoise.Size = new System.Drawing.Size(693, 213);
+            this.listViewNoise.Size = new System.Drawing.Size(693, 161);
             this.listViewNoise.TabIndex = 24;
             this.listViewNoise.UseCompatibleStateImageBehavior = false;
             this.listViewNoise.View = System.Windows.Forms.View.Details;
@@ -306,7 +308,7 @@
             // buttonAddNoise
             // 
             this.buttonAddNoise.Font = new System.Drawing.Font("宋体", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonAddNoise.Location = new System.Drawing.Point(562, 579);
+            this.buttonAddNoise.Location = new System.Drawing.Point(562, 560);
             this.buttonAddNoise.Name = "buttonAddNoise";
             this.buttonAddNoise.Size = new System.Drawing.Size(38, 38);
             this.buttonAddNoise.TabIndex = 25;
@@ -317,7 +319,7 @@
             // buttonDropNoise
             // 
             this.buttonDropNoise.Font = new System.Drawing.Font("Times New Roman", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonDropNoise.Location = new System.Drawing.Point(644, 579);
+            this.buttonDropNoise.Location = new System.Drawing.Point(644, 557);
             this.buttonDropNoise.Name = "buttonDropNoise";
             this.buttonDropNoise.Size = new System.Drawing.Size(38, 38);
             this.buttonDropNoise.TabIndex = 26;
@@ -327,10 +329,10 @@
             // 
             // Dem2SchemaDlg
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(788, 947);
+            this.ClientSize = new System.Drawing.Size(788, 823);
             this.Controls.Add(this.buttonDropNoise);
             this.Controls.Add(this.buttonAddNoise);
             this.Controls.Add(this.listViewNoise);

@@ -1,6 +1,5 @@
 using ESRI.ArcGIS.esriSystem;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace DEM2SchemExplorer
@@ -14,7 +13,7 @@ namespace DEM2SchemExplorer
         [STAThread]
         static void Main()
         {
-            m_AOLicenseInitializer.InitializeApplication(new esriLicenseProductCode[] { esriLicenseProductCode.esriLicenseProductCodeEngine, esriLicenseProductCode.esriLicenseProductCodeEngineGeoDB }, new esriLicenseExtensionCode[] { });
+            m_AOLicenseInitializer.InitializeApplication(new[] { esriLicenseProductCode.esriLicenseProductCodeEngine, esriLicenseProductCode.esriLicenseProductCodeEngineGeoDB }, new esriLicenseExtensionCode[] { });
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());

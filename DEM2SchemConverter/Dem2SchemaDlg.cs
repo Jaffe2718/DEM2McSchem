@@ -47,7 +47,7 @@ namespace DEM2SchematicConverter
                 comboBoxDEMLayer.SelectedIndex = 0;
             }
             String tempDir = Path.GetTempPath();
-            textBoxExportPath.Text = System.IO.Path.Combine(tempDir, "DEM2Schema.schem");
+            textBoxExportPath.Text = Path.Combine(tempDir, "DEM2Schema.schem");
             
             // set default value of combo box
             comboBoxInterpolation.SelectedIndex = 1;  // bi-linear

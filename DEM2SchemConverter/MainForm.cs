@@ -1,10 +1,12 @@
 using System;
 using System.Windows.Forms;
 using DEM2SchematicConverter;
+using DEM2SchemConverter;
 using ESRI.ArcGIS.Analyst3D;
 using ESRI.ArcGIS.Carto;
 using ESRI.ArcGIS.Catalog;
 using ESRI.ArcGIS.CatalogUI;
+using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.DataSourcesRaster;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
@@ -132,6 +134,25 @@ namespace DEM2SchemExplorer
             prop3D.Apply3DProperties(demLayer);
             axSceneControl1.SceneGraph.RefreshViewers();
         }
-        
+
+        private void axTOCControl1_OnDoubleClick(object sender, ESRI.ArcGIS.Controls.ITOCControlEvents_OnDoubleClickEvent e)
+        {
+            if (e.button == 1)
+            {
+                // get clicked layer
+                IBasicMap map = null;
+                ILayer layer = null;
+                object other = null;
+                object index = null;
+                esriTOCControlItem item = esriTOCControlItem.esriTOCControlItemNone;
+                axTOCControl1.HitTest(e.x, e.y, ref item, ref map, ref layer, ref other, ref index);
+                // ensure the item gets selected
+                if (item == esriTOCControlItem.esriTOCControlItemLayer)
+                {
+                    axTOCControl1.SelectItem(layer, null);
+                    new ViewMetaDlg(axSceneControl1, layer).Show();
+                }
+            }
+        }
     }
 }
