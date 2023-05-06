@@ -56,7 +56,7 @@ namespace DEM2SchemExplorer
             this.axToolbarControl1.Location = new System.Drawing.Point(56, 28);
             this.axToolbarControl1.Name = "axToolbarControl1";
             this.axToolbarControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axToolbarControl1.OcxState")));
-            this.axToolbarControl1.Size = new System.Drawing.Size(397, 28);
+            this.axToolbarControl1.Size = new System.Drawing.Size(397, 30);
             this.axToolbarControl1.TabIndex = 1;
             // 
             // axSceneControl1
@@ -90,6 +90,7 @@ namespace DEM2SchemExplorer
             // 
             // buttonAdd
             // 
+            this.buttonAdd.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.buttonAdd.Location = new System.Drawing.Point(56, 677);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(186, 66);
@@ -100,6 +101,7 @@ namespace DEM2SchemExplorer
             // 
             // buttonAddDB
             // 
+            this.buttonAddDB.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.buttonAddDB.Location = new System.Drawing.Point(267, 677);
             this.buttonAddDB.Name = "buttonAddDB";
             this.buttonAddDB.Size = new System.Drawing.Size(186, 66);
