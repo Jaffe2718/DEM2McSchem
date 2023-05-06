@@ -80,9 +80,6 @@
     <Reference Include="ESRI.ArcGIS.Geoprocessor">
       <HintPath>C:\Program Files (x86)\ArcGIS\DeveloperKit10.8\DotNet\ESRI.ArcGIS.Geoprocessor.dll</HintPath>
     </Reference>
-    <Reference Include="ESRI.ArcGIS.GlobeCore, Version=10.8.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
     <Reference Include="ESRI.ArcGIS.Output, Version=10.8.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
@@ -90,15 +87,9 @@
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.8.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
     <Reference Include="ESRI.ArcGIS.Version, Version=10.8.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.WindowsAPICodePack.Core.1.1.0\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -191,15 +182,6 @@
     </COMReference>
     <COMReference Include="esriAnimation">
       <Guid>{643D491A-D5BD-4788-B610-A0F53CBA0940}</Guid>
-      <VersionMajor>10</VersionMajor>
-      <VersionMinor>8</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="esriArcMapUI">
-      <Guid>{40499F24-596F-45D2-ACE1-A251E2990017}</Guid>
       <VersionMajor>10</VersionMajor>
       <VersionMinor>8</VersionMinor>
       <Lcid>0</Lcid>
