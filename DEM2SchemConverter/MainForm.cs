@@ -135,7 +135,7 @@ namespace DEM2SchemExplorer
             axSceneControl1.SceneGraph.RefreshViewers();
         }
 
-        private void axTOCControl1_OnDoubleClick(object sender, ESRI.ArcGIS.Controls.ITOCControlEvents_OnDoubleClickEvent e)
+        private void axTOCControl1_OnDoubleClick(object sender, ITOCControlEvents_OnDoubleClickEvent e)
         {
             if (e.button == 1)
             {
