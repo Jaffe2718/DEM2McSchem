@@ -7,6 +7,12 @@ by [Jaffe2718](https://github.com/Jaffe2718)
 ![Issues](https://img.shields.io/github/issues/Jaffe2718/DEM2McSchem?style=flat-square)
 ![License](https://img.shields.io/github/license/Jaffe2718/DEM2McSchem?style=flat-square)
 
+## Preface
+作者是湖南师范大学地理科学学院2021级地理信息科学专业的在读本科生，邮箱是[202130163019@hunnu.edu.cn](mailto:202130163019@hunnu.edu.cn)。
+这其实是组件式地理信息系统开发课程的项目作业，但是我觉得这个项目还是挺有意思的，所以就把它放到了GitHub上。
+The author is a 2021 undergraduate student majoring in Geographic Information Science at the School of Geography, Hunan Normal University, the email is [202130163019@hunnu.edu.cn](mailto:202130163019@hunnu.edu.cn).
+This is the project assignment of the course "Component-based GIS Development", but I think this project is interesting, so I put it on GitHub.
+
 ## User Documentation
 
 ### Product Description
@@ -279,7 +285,3 @@ The source repository is [here](https://github.com/Jaffe2718/DEM2McSchem).
 [Bilibili](https://space.bilibili.com/1671742926)
 
 [Email](mailto:202130163019@hunnu.edu.cn)
-
-## Additional Information
-这其实是组件式地理信息系统开发课程的项目作业，但是我觉得这个项目还是挺有意思的，所以就把它放到了GitHub上。
-This is the project assignment of the course "Component-based GIS Development", but I think this project is interesting, so I put it on GitHub.
